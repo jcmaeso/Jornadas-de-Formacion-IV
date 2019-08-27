@@ -58,7 +58,17 @@ void LED_toggle_effect(){
 	}
 }
 
+unsigned short int* RTC_get_tick(){
+	static unsigned short int tick;
+	tick = HAL_GetTick();
+	return &tick;
+}
+
 static void BTN_interrupt_handler(uint16_t GPIO_PIN){
+	if(!((*flags) & SIMON_GAME_ON)){
+		(*flags) |= SIMON_GAME_ON;
+		return;
+	}
 	if((*flags) & SIMON_LISTEN_TO_SECUENCE && (*user_sequence_position) < SIMON_MAX_LEVEL){
 		switch(GPIO_PIN){
 		case GPIO_PIN_4:
@@ -76,3 +86,6 @@ static void BTN_interrupt_handler(uint16_t GPIO_PIN){
 		*(user_sequence_position) += 1;
 	}
 }
+
+
+
