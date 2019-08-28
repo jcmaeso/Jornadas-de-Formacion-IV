@@ -94,7 +94,7 @@ static void  output_func_restore(fsm_t* fsm){
 
 static void simon_generate_random_sequence(simon_t* game_data){
 	int i;
-	for(i = 0; i < game_data->level; i++)
+	for(i = 0; i < (game_data->level > SIMON_MAX_LEVEL ? SIMON_MAX_LEVEL : game_data->level); i++)
 		game_data->led_sequence[i] = nrand48(RTC_get_tick())%3;
 }
 
@@ -119,7 +119,6 @@ simon_t* simon_init(long int random_seed){
 	static simon_t game_data[1];
 	game_data->fsm.tt = simon_transition_table;
 	game_data->level = 0;
-	game_data->game_flags = SIMON_GAME_ON;
 	game_data->display_speed = 2;
 	game_data->_IRQ_BTN_handler = simon_LL_init(&game_data->game_flags,game_data->user_sequence,&game_data->user_sequence_position);
 	return game_data;
